@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>I love you ❤️</title>
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="https://img.icons8.com/emoji/160/heart-suit.png">
+    
+    <style>
+        :root { --pink: #ffafcc; --dark-pink: #fb6f92; }
+        
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100%; 
+            display: flex; flex-direction: column; align-items: center; 
+            background-image: url('https://i.postimg.cc/5NRkzD9r/4E4BB03A-C2CF-4C2B-8017-917D5EEA2926.jpg'); 
+            background-size: cover; background-position: center;
+            font-family: -apple-system, sans-serif; overflow: hidden; 
+        }
+
+        .container {
+            display: flex; flex-direction: column; align-items: center;
+            justify-content: center; width: 100%; height: 100%;
+            padding-top: 80px; 
+        }
+
+        .instruction { 
+            margin-bottom: 25px; color: white; font-weight: bold; 
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.6); font-size: 1.4rem;
+        }
+
+        .heart-box {
+            position: relative; width: 300px; height: 260px;
+            cursor: pointer; perspective: 1000px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.98);
+            position: absolute; width: 300px; height: 260px;
+            clip-path: path('M150,260 L130,240 C50,180 0,140 0,80 C0,30 40,0 90,0 C120,0 140,20 150,35 C160,20 180,0 210,0 C260,0 300,30 300,80 C300,140 250,180 170,240 L150,260 Z');
+            display: flex; flex-direction: column; justify-content: center;
+            align-items: center; padding: 45px; text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3); z-index: 1;
+            box-sizing: border-box;
+        }
+
+        .flap {
+            position: absolute; width: 300px; height: 260px; top: 0; left: 0;
+            background: var(--pink); z-index: 2;
+            transition: transform 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .left-flap {
+            clip-path: path('M150,260 L130,240 C50,180 0,140 0,80 C0,30 40,0 90,0 C120,0 140,20 150,35 L150,260 Z');
+            transform-origin: center left;
+        }
+
+        .right-flap {
+            clip-path: path('M150,260 L150,35 C160,20 180,0 210,0 C260,0 300,30 300,80 C300,140 250,180 170,240 L150,260 Z');
+            transform-origin: center right;
+        }
+
+        .heart-box.open .left-flap { transform: rotateY(-145deg); opacity: 0.7; }
+        .heart-box.open .right-flap { transform: rotateY(145deg); opacity: 0.7; }
+
+        .particle { position: absolute; pointer-events: none; z-index: 100; animation: fly 1.2s ease-out forwards; font-size: 24px; }
+        @keyframes fly { 0% { transform: translate(0,0) scale(1); opacity: 1; } 100% { transform: translate(var(--x), var(--y)) scale(0); opacity: 0; } }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="instruction">I love you Shreya ❤️</div>
+
+        <div class="heart-box" id="heart" onclick="toggleHeart(this)">
+            <div class="card">
+                <div id="date-label" style="font-size: 0.75rem; color: var(--dark-pink); margin-bottom: 8px; font-weight: bold;"></div>
+                <div id="note-text" style="color: #444; font-weight: 600; font-size: 1.1rem; line-height: 1.4; font-style: italic;"></div>
+                <div id="signature" style="font-size: 0.9rem; color: var(--dark-pink); margin-top: 15px; font-weight: bold;">— Love, Raj</div>
+            </div>
+            <div class="flap left-flap"></div>
+            <div class="flap right-flap"></div>
+        </div>
+    </div>
+
+    <script>
+        const msgs = [
+            "Good morning beautiful! Just a reminder that you're the best part of my day.",
+            "I hope your day is as bright and lovely as your smile.",
+            "Thinking of you and how lucky I am to have you by my side.",
+            "You're doing amazing today! I'm your #1 fan, always.",
+            "Just wanted to say I love you more than words can describe.",
+            "You are my favorite thought. Have a magical day, princess.",
+            "Sending you a giant hug and a million kisses through this note!",
+            "Thank you for being you. You make my world so much better.",
+            "Whatever today brings, remember you've got this and I've got you.",
+            "Your laugh is my favorite song. Can't wait to hear it later!",
+            "I'm so proud of everything you are and everything you do.",
+            "You're the most beautiful person I know inside and out.",
+            "If you're having a tough day, just remember: I love you endlessly.",
+            "You are my sunshine on the cloudiest days. Stay bright!",
+            "I love the way you see the world. You're so special to me.",
+            "Just a little note to let you know you're always on my mind.",
+            "You deserve the world, and I'll do my best to give it to you.",
+            "My heart beats a little faster every time I think of you.",
+            "You're my person, my best friend, and my whole heart.",
+            "Count your blessings today, and don't forget to count yourself!",
+            "You make life feel like a beautiful dream come true.",
+            "Keep being your wonderful self. You inspire me every single day.",
+            "I love you to the moon and back... and even further than that.",
+            "Every day with you is a new adventure I never want to end.",
+            "You're my home. Thank you for being my safe place.",
+            "Wishing I was there to hold your hand right now. I love you!",
+            "You are strong, you are kind, and you are absolutely gorgeous.",
+            "I fall in love with you a little more every single morning.",
+            "No matter how far apart we are, you're always right here in my heart.",
+            "You're the girl of my dreams. I'm so glad you're real.",
+            "The best is yet to come for us. I love you forever!"
+        ];
+
+        function init() {
+            const today = new Date();
+            const dayNum = today.getDate(); 
+            document.getElementById('note-text').innerText = msgs[dayNum - 1];
+            document.getElementById('date-label').innerText = today.toLocaleDateString(undefined, {month:'short', day:'numeric'});
+        }
+
+        function createParticle(x, y) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            p.innerHTML = Math.random() > 0.5 ? '💗' : '✨';
+            p.style.left = x + 'px'; p.style.top = y + 'px';
+            const angle = Math.random() * Math.PI * 2;
+            const velocity = Math.random() * 200 + 50;
+            p.style.setProperty('--x', Math.cos(angle) * velocity + 'px');
+            p.style.setProperty('--y', Math.sin(angle) * velocity + 'px');
+            document.body.appendChild(p);
+            setTimeout(() => p.remove(), 1200);
+        }
+
+        function toggleHeart(el) {
+            const isOpening = !el.classList.contains('open');
+            el.classList.toggle('open');
+            if (isOpening) {
+                const rect = el.getBoundingClientRect();
+                for (let i = 0; i < 20; i++) {
+                    createParticle(rect.left + rect.width/2, rect.top + rect.height/2);
+                }
+            }
+        }
+        init();
+    </script>
+</body>
+</html>
