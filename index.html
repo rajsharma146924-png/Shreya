@@ -12,7 +12,7 @@
     <link rel="apple-touch-icon" href="https://img.icons8.com/emoji/160/heart-suit.png">
     
     <style>
-        :root { --pink: #ffafcc; --dark-pink: #fb6f92; }
+        :root { --pink: #ffafcc; --dark-pink: #fb6f92; --beige-pink: #f7e1e1; }
         
         body, html { 
             margin: 0; padding: 0; width: 100%; height: 100%; 
@@ -26,7 +26,7 @@
         .container {
             display: flex; flex-direction: column; align-items: center;
             justify-content: center; width: 100%; height: 100%;
-            padding-top: 80px; 
+            padding-top: 60px; 
         }
 
         .instruction { 
@@ -34,7 +34,6 @@
             text-shadow: 2px 2px 8px rgba(0,0,0,0.6); font-size: 1.4rem;
         }
 
-        /* PULSE ANIMATION */
         @keyframes heartbeat {
             0% { transform: scale(1); }
             14% { transform: scale(1.1); }
@@ -61,37 +60,51 @@
             box-sizing: border-box;
         }
 
-        /* FIXED & ANIMATED SECRET OVERLAY */
+        /* SECRET OVERLAY WITH BEIGE-PINK THEME */
         #secret-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.88);
+            background: rgba(247, 225, 225, 0.95); /* Beige-Pink */
             display: none; flex-direction: column; justify-content: center;
-            align-items: center; z-index: 1000; text-align: center; color: white;
-            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-            padding: 40px; box-sizing: border-box;
+            align-items: center; z-index: 1000; text-align: center; color: #444;
+            backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
+            padding: 30px; box-sizing: border-box;
             opacity: 0; transition: opacity 0.5s ease;
+            overflow: hidden;
         }
 
-        #secret-overlay.show {
-            display: flex; opacity: 1;
-        }
+        #secret-overlay.show { display: flex; opacity: 1; }
 
         .secret-content {
-            transform: scale(0.7);
+            transform: scale(0.8);
             transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            max-width: 100%;
+            z-index: 1001;
+            width: 100%;
         }
 
-        #secret-overlay.show .secret-content {
-            transform: scale(1);
-        }
+        #secret-overlay.show .secret-content { transform: scale(1); }
 
         .handwritten {
             font-family: 'Dancing Script', cursive;
-            line-height: 1.4;
-            color: #fff;
-            text-shadow: 0 0 15px rgba(251, 111, 146, 0.9);
-            word-wrap: break-word; /* Prevents text overflow */
+            line-height: 1.5;
+            color: #fb6f92;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+            word-wrap: break-word;
+        }
+
+        /* FLOATING EMOJIS */
+        .floating-emoji {
+            position: absolute;
+            font-size: 2rem;
+            animation: float-up 6s infinite ease-in-out;
+            opacity: 0.6;
+            z-index: 999;
+        }
+
+        @keyframes float-up {
+            0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+            20% { opacity: 0.6; }
+            80% { opacity: 0.6; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
         }
 
         .flap {
@@ -121,12 +134,12 @@
 
     <div id="secret-overlay" onclick="closeSecret()">
         <div class="secret-content">
-            <h2 class="handwritten" style="color: var(--pink); font-size: 2.2rem; margin-bottom: 15px;">My Forever Promise</h2>
-            <p class="handwritten" style="font-size: 1.6rem;">
+            <h2 class="handwritten" style="font-size: 2.2rem; margin-bottom: 15px;">My Forever Promise</h2>
+            <p class="handwritten" style="font-size: 1.6rem; padding: 0 10px;">
                 "Shreya, no matter which day it is, my love for you never changes. 
                 You are my forever and always. ❤️"
             </p>
-            <p style="margin-top: 40px; font-size: 0.8rem; opacity: 0.6; font-family: sans-serif;">(Tap anywhere to go back)</p>
+            <p style="margin-top: 40px; font-size: 0.8rem; opacity: 0.6; font-family: sans-serif; color: #888;">(Tap anywhere to go back)</p>
         </div>
     </div>
 
@@ -195,10 +208,16 @@
         function showSecret() {
             const overlay = document.getElementById('secret-overlay');
             overlay.style.display = 'flex';
-            // Force a reflow for the animation to trigger
-            setTimeout(() => {
-                overlay.classList.add('show');
-            }, 10);
+            // Add emojis
+            for(let i=0; i<8; i++) {
+                const e = document.createElement('div');
+                e.className = 'floating-emoji';
+                e.innerText = Math.random() > 0.5 ? '💞' : '🫶🏻';
+                e.style.left = Math.random() * 100 + 'vw';
+                e.style.animationDelay = (Math.random() * 5) + 's';
+                overlay.appendChild(e);
+            }
+            setTimeout(() => overlay.classList.add('show'), 10);
         }
 
         function closeSecret() {
@@ -206,6 +225,9 @@
             overlay.classList.remove('show');
             setTimeout(() => {
                 overlay.style.display = 'none';
+                // Remove emojis to keep it clean for next time
+                const emojis = overlay.querySelectorAll('.floating-emoji');
+                emojis.forEach(e => e.remove());
             }, 500);
         }
 
