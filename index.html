@@ -76,7 +76,7 @@
         .secret-content {
             transform: scale(0.8);
             transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 2000; /* Stays above emojis */
+            z-index: 2000;
             width: 100%;
             position: relative;
         }
@@ -85,14 +85,15 @@
 
         .handwritten {
             font-family: 'Dancing Script', cursive;
-            line-height: 1.5; color: #fb6f92;
+            line-height: 1.6; color: #fb6f92;
             text-shadow: 1px 1px 1px rgba(255,255,255,0.8);
             word-wrap: break-word; margin: 0;
+            white-space: pre-line; /* Keeps your custom line breaks */
         }
 
         .floating-emoji {
-            position: absolute; font-size: 2rem;
-            animation: float-up 6s infinite linear;
+            position: absolute; font-size: 2.2rem;
+            animation: float-up 7s infinite linear;
             opacity: 0.4; z-index: 10; pointer-events: none;
         }
 
@@ -128,16 +129,16 @@
 
     <div id="secret-overlay" onclick="closeSecret()">
         <div class="secret-content">
-            <h2 class="handwritten" style="font-size: 2.3rem; margin-bottom: 15px;">My Forever Promise</h2>
-            <p class="handwritten" style="font-size: 1.7rem;">
+            <h2 class="handwritten" style="font-size: 2.4rem; margin-bottom: 20px;">My Forever Promise</h2>
+            <p class="handwritten" style="font-size: 1.7rem; padding: 0 15px;">
                 "Shreya, Every heartbeat of mine 
                 carries a promise to love you,
                 cherish you, and choose you 
                 for the rest of my life... ❤️
                 To being eachothers safe space 
-                      FOREVER 💕"
+                FOREVER"
             </p>
-            <p style="margin-top: 40px; font-size: 0.8rem; opacity: 0.6; font-family: sans-serif; color: #888;">(Tap anywhere to go back)</p>
+            <p style="margin-top: 50px; font-size: 0.8rem; opacity: 0.6; font-family: sans-serif; color: #888;">(Tap anywhere to go back)</p>
         </div>
     </div>
 
@@ -196,12 +197,13 @@
         function showSecret() {
             const overlay = document.getElementById('secret-overlay');
             overlay.style.display = 'flex';
-            // Spawn emojis only on the sides (left 20% or right 20%)
+            
+            // Generate emojis on the edges only to keep text clear
             for(let i=0; i<12; i++) {
                 const e = document.createElement('div');
                 e.className = 'floating-emoji';
                 e.innerText = Math.random() > 0.5 ? '💞' : '🫶🏻';
-                const side = Math.random() > 0.5 ? (Math.random() * 15) : (80 + Math.random() * 15);
+                const side = Math.random() > 0.5 ? (Math.random() * 15) : (85 + Math.random() * 10);
                 e.style.left = side + 'vw';
                 e.style.animationDelay = (Math.random() * 5) + 's';
                 overlay.appendChild(e);
