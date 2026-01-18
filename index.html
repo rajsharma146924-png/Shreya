@@ -1,4 +1,4 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -34,6 +34,7 @@
             text-shadow: 2px 2px 8px rgba(0,0,0,0.6); font-size: 1.4rem;
         }
 
+        /* PULSE ANIMATION */
         @keyframes heartbeat {
             0% { transform: scale(1); }
             14% { transform: scale(1.1); }
@@ -60,22 +61,37 @@
             box-sizing: border-box;
         }
 
+        /* FIXED & ANIMATED SECRET OVERLAY */
         #secret-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.85);
+            background: rgba(0, 0, 0, 0.88);
             display: none; flex-direction: column; justify-content: center;
             align-items: center; z-index: 1000; text-align: center; color: white;
-            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-            padding: 30px;
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            padding: 40px; box-sizing: border-box;
+            opacity: 0; transition: opacity 0.5s ease;
         }
 
-        /* Handwritten font applied here */
+        #secret-overlay.show {
+            display: flex; opacity: 1;
+        }
+
+        .secret-content {
+            transform: scale(0.7);
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            max-width: 100%;
+        }
+
+        #secret-overlay.show .secret-content {
+            transform: scale(1);
+        }
+
         .handwritten {
             font-family: 'Dancing Script', cursive;
-            font-size: 1.8rem;
             line-height: 1.4;
             color: #fff;
-            text-shadow: 0 0 10px rgba(251, 111, 146, 0.8);
+            text-shadow: 0 0 15px rgba(251, 111, 146, 0.9);
+            word-wrap: break-word; /* Prevents text overflow */
         }
 
         .flap {
@@ -104,12 +120,14 @@
 <body>
 
     <div id="secret-overlay" onclick="closeSecret()">
-        <h2 class="handwritten" style="color: var(--pink); font-size: 2.5rem; margin-bottom: 20px;">My Forever Promise</h2>
-        <p class="handwritten">
-            "Shreya, no matter which day it is, my love for you never changes. 
-            You are my forever and always. ❤️"
-        </p>
-        <p style="margin-top: 40px; font-size: 0.8rem; opacity: 0.6; font-family: sans-serif;">(Tap anywhere to go back)</p>
+        <div class="secret-content">
+            <h2 class="handwritten" style="color: var(--pink); font-size: 2.2rem; margin-bottom: 15px;">My Forever Promise</h2>
+            <p class="handwritten" style="font-size: 1.6rem;">
+                "Shreya, no matter which day it is, my love for you never changes. 
+                You are my forever and always. ❤️"
+            </p>
+            <p style="margin-top: 40px; font-size: 0.8rem; opacity: 0.6; font-family: sans-serif;">(Tap anywhere to go back)</p>
+        </div>
     </div>
 
     <div class="container">
@@ -175,11 +193,20 @@
         }
 
         function showSecret() {
-            document.getElementById('secret-overlay').style.display = 'flex';
+            const overlay = document.getElementById('secret-overlay');
+            overlay.style.display = 'flex';
+            // Force a reflow for the animation to trigger
+            setTimeout(() => {
+                overlay.classList.add('show');
+            }, 10);
         }
 
         function closeSecret() {
-            document.getElementById('secret-overlay').style.display = 'none';
+            const overlay = document.getElementById('secret-overlay');
+            overlay.classList.remove('show');
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 500);
         }
 
         function init() {
@@ -203,7 +230,7 @@
         }
 
         function toggleHeart(el) {
-            if(document.getElementById('secret-overlay').style.display === 'flex') return;
+            if(document.getElementById('secret-overlay').classList.contains('show')) return;
             const isOpening = !el.classList.contains('open');
             el.classList.toggle('open');
             if (isOpening) {
