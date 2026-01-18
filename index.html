@@ -60,12 +60,11 @@
             box-sizing: border-box;
         }
 
-        /* SECRET OVERLAY WITH BEIGE-PINK THEME */
         #secret-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(247, 225, 225, 0.95); /* Beige-Pink */
+            background: rgba(247, 225, 225, 0.95);
             display: none; flex-direction: column; justify-content: center;
-            align-items: center; z-index: 1000; text-align: center; color: #444;
+            align-items: center; z-index: 1000; text-align: center;
             backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
             padding: 30px; box-sizing: border-box;
             opacity: 0; transition: opacity 0.5s ease;
@@ -77,8 +76,10 @@
         .secret-content {
             transform: scale(0.8);
             transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 1001;
+            /* FIXED: Higher z-index ensures text stays ABOVE emojis */
+            z-index: 1010; 
             width: 100%;
+            position: relative;
         }
 
         #secret-overlay.show .secret-content { transform: scale(1); }
@@ -87,24 +88,23 @@
             font-family: 'Dancing Script', cursive;
             line-height: 1.5;
             color: #fb6f92;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+            text-shadow: 1px 1px 1px rgba(255,255,255,0.8);
             word-wrap: break-word;
         }
 
-        /* FLOATING EMOJIS */
+        /* EMOJIS FLOAT BEHIND THE TEXT */
         .floating-emoji {
             position: absolute;
-            font-size: 2rem;
-            animation: float-up 6s infinite ease-in-out;
-            opacity: 0.6;
-            z-index: 999;
+            font-size: 2.2rem;
+            animation: float-up 7s infinite linear;
+            opacity: 0.35; /* Made slightly more transparent to help readability */
+            z-index: 1001; 
+            pointer-events: none;
         }
 
         @keyframes float-up {
-            0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }
-            20% { opacity: 0.6; }
-            80% { opacity: 0.6; }
-            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+            0% { transform: translateY(110vh) rotate(0deg); }
+            100% { transform: translateY(-20vh) rotate(360deg); }
         }
 
         .flap {
@@ -134,8 +134,8 @@
 
     <div id="secret-overlay" onclick="closeSecret()">
         <div class="secret-content">
-            <h2 class="handwritten" style="font-size: 2.2rem; margin-bottom: 15px;">My Forever Promise</h2>
-            <p class="handwritten" style="font-size: 1.6rem; padding: 0 10px;">
+            <h2 class="handwritten" style="font-size: 2.3rem; margin-bottom: 15px;">My Forever Promise</h2>
+            <p class="handwritten" style="font-size: 1.7rem; padding: 0 10px;">
                 "Shreya, no matter which day it is, my love for you never changes. 
                 You are my forever and always. ❤️"
             </p>
@@ -208,15 +208,17 @@
         function showSecret() {
             const overlay = document.getElementById('secret-overlay');
             overlay.style.display = 'flex';
-            // Add emojis
-            for(let i=0; i<8; i++) {
+            
+            // Generate emojis one by one
+            for(let i=0; i<10; i++) {
                 const e = document.createElement('div');
                 e.className = 'floating-emoji';
                 e.innerText = Math.random() > 0.5 ? '💞' : '🫶🏻';
-                e.style.left = Math.random() * 100 + 'vw';
-                e.style.animationDelay = (Math.random() * 5) + 's';
+                e.style.left = (Math.random() * 90) + 'vw';
+                e.style.animationDelay = (Math.random() * 6) + 's';
                 overlay.appendChild(e);
             }
+            
             setTimeout(() => overlay.classList.add('show'), 10);
         }
 
@@ -225,7 +227,6 @@
             overlay.classList.remove('show');
             setTimeout(() => {
                 overlay.style.display = 'none';
-                // Remove emojis to keep it clean for next time
                 const emojis = overlay.querySelectorAll('.floating-emoji');
                 emojis.forEach(e => e.remove());
             }, 500);
