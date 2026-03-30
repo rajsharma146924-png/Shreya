@@ -50,6 +50,18 @@
 
         .heart-box.open { animation: none; }
 
+        /* Birthday Special Mode Style */
+        .heart-box.birthday-mode .card {
+            border: 3px solid #FFD700;
+            box-shadow: 0 0 30px #FFD700;
+            background: linear-gradient(135deg, #fff 0%, #fff9e6 100%);
+        }
+
+        .confetti {
+            position: fixed; width: 10px; height: 10px;
+            z-index: 9999; pointer-events: none;
+        }
+
         .card {
             background: rgba(255, 255, 255, 0.98);
             position: absolute; width: 300px; height: 260px;
@@ -88,7 +100,7 @@
             line-height: 1.6; color: #fb6f92;
             text-shadow: 1px 1px 1px rgba(255,255,255,0.8);
             word-wrap: break-word; margin: 0;
-            white-space: pre-line; /* Keeps your custom line breaks */
+            white-space: pre-line;
         }
 
         .floating-emoji {
@@ -144,52 +156,53 @@
 
     <div class="container">
         <div class="instruction">I love you Shreya ❤️</div>
-        <div class="heart-box" id="heart" onclick="toggleHeart(this)" ontouchstart="startPress()" ontouchend="endPress()">
-            <div class="card">
-                <div id="date-label" style="font-size: 0.75rem; color: var(--dark-pink); margin-bottom: 8px; font-weight: bold;"></div>
-                <div id="note-text" style="color: #444; font-weight: 600; font-size: 1.1rem; line-height: 1.4; font-style: italic;"></div>
-                <div id="signature" style="font-size: 0.9rem; color: var(--dark-pink); margin-top: 15px; font-weight: bold;">— Love, Raj</div>
+        <div id="heart-wrapper">
+            <div class="heart-box" id="heart" onclick="toggleHeart(this)" ontouchstart="startPress()" ontouchend="endPress()">
+                <div class="card">
+                    <div id="date-label" style="font-size: 0.75rem; color: var(--dark-pink); margin-bottom: 8px; font-weight: bold;"></div>
+                    <div id="note-text" style="color: #444; font-weight: 600; font-size: 1.1rem; line-height: 1.4; font-style: italic;"></div>
+                    <div id="signature" style="font-size: 0.9rem; color: var(--dark-pink); margin-top: 15px; font-weight: bold;">— Love, Raj</div>
+                </div>
+                <div class="flap left-flap"></div>
+                <div class="flap right-flap"></div>
             </div>
-            <div class="flap left-flap"></div>
-            <div class="flap right-flap"></div>
         </div>
     </div>
 
     <script>
         const msgs = [
-    "Every heartbeat of mine is just a quiet way of saying your name.",
-    "The world is a blur, but you are the only thing in perfect focus.",
-    "I don’t just love you; I am completely consumed by you, Shreya.",
-    "If I could live a thousand lives, I’d choose you in every single one.",
-    "You aren't just my favorite person; you are my entire world.",
-    "My heart didn't truly start beating until the day it met yours. still reading these?",
-    "In a room full of art, I’d still be staring at you. are you even reading these?",
-    "You are the only 'home' I have ever truly known. Still Reading these or not?",
-    "I love you with a depth that words will never be able to reach. Are you still reading these?",
-    "My favorite place in the whole world is wherever you are standing. Are you still reading these?",
-    "You are the most beautiful thing I have ever held in my heart.",
-    "I am yours, completely and dangerously. Always and forever.",
-    "I wanna hold you forever Princess.",      
-    "The thought of you is the only thing that keeps me sane.",
-    "You are my first thought, my last breath, and everything in between.",
-    "I’d walk through fire just to see that smile on your face, Shreya.",
-    "You’re not just a dream come true; you’re the dream I never want to end.",
-    "My love for you isn't a choice; it's as natural as breathing.",
-    "Whatever our souls are made of, yours and mine are exactly the same.",
-    "I look at you and I see the rest of my life right in front of me.",
-    "You are the poem I never knew I was capable of writing. HAPPY BIRTHDAY MY LOVE 💞",
-    "Every day I wake up and realize I love you more than the day before.",
-    "You have a way of making my soul feel completely at peace and sometimes maybe chaos😉.",
-    "I would follow you into the dark, as long as I’m holding your hand.",
-    "You are my once-in-a-lifetime, my miracle, and my everything.",
-    "I love you with every fiber of my being, today and for eternity.",
-    "The best part of me is you. Thank you for choosing me.",
-    "I am hopelessly, endlessly, and violently in love with you.",
-    "You are the only person who holds the key to my entire heart.",
-    "One life with you isn't enough; I need forever and then some.",
-    "March ends, but my love for you only grows deeper.",
-];
-
+            "Every heartbeat of mine is just a quiet way of saying your name.",
+            "The world is a blur, but you are the only thing in perfect focus.",
+            "I don’t just love you; I am completely consumed by you, Shreya.",
+            "If I could live a thousand lives, I’d choose you in every single one.",
+            "You aren't just my favorite person; you are my entire world.",
+            "My heart didn't truly start beating until the day it met yours. still reading these?",
+            "In a room full of art, I’d still be staring at you. are you even reading these?",
+            "You are the only 'home' I have ever truly known. Still Reading these or not?",
+            "I love you with a depth that words will never be able to reach. Are you still reading these?",
+            "My favorite place in the whole world is wherever you are standing. Are you still reading these?",
+            "You are the most beautiful thing I have ever held in my heart. HAPPY BIRTHDAY MY LOVE 💞",
+            "I am yours, completely and dangerously. Always and forever.",
+            "I wanna hold you forever Princess.",      
+            "The thought of you is the only thing that keeps me sane.",
+            "You are my first thought, my last breath, and everything in between.",
+            "I’d walk through fire just to see that smile on your face, Shreya.",
+            "You’re not just a dream come true; you’re the dream I never want to end.",
+            "My love for you isn't a choice; it's as natural as breathing.",
+            "Whatever our souls are made of, yours and mine are exactly the same.",
+            "I look at you and I see the rest of my life right in front of me.",
+            "You are the poem I never knew I was capable of writing.",
+            "Every day I wake up and realize I love you more than the day before.",
+            "You have a way of making my soul feel completely at peace and sometimes maybe chaos😉.",
+            "I would follow you into the dark, as long as I’m holding your hand.",
+            "You are my once-in-a-lifetime, my miracle, and my everything.",
+            "I love you with every fiber of my being, today and for eternity.",
+            "The best part of me is you. Thank you for choosing me.",
+            "I am hopelessly, endlessly, and violently in love with you.",
+            "You are the only person who holds the key to my entire heart.",
+            "One life with you isn't enough; I need forever and then some.",
+            "April ends, but my love for you only grows deeper.",
+        ];
 
         let pressTimer;
         function startPress() { pressTimer = window.setTimeout(showSecret, 800); }
@@ -198,8 +211,6 @@
         function showSecret() {
             const overlay = document.getElementById('secret-overlay');
             overlay.style.display = 'flex';
-            
-            // Generate emojis on the edges only to keep text clear
             for(let i=0; i<12; i++) {
                 const e = document.createElement('div');
                 e.className = 'floating-emoji';
@@ -225,8 +236,34 @@
         function init() {
             const today = new Date();
             const dayNum = today.getDate(); 
+            const month = today.getMonth(); // 3 = April
+
+            // Apply birthday mode style if it's April 11th
+            if (month === 3 && dayNum === 11) {
+                document.getElementById('heart').classList.add('birthday-mode');
+            }
+
             document.getElementById('note-text').innerText = msgs[dayNum - 1];
             document.getElementById('date-label').innerText = today.toLocaleDateString(undefined, {month:'short', day:'numeric'});
+        }
+
+        function triggerConfetti() {
+            for (let i = 0; i < 50; i++) {
+                const c = document.createElement('div');
+                c.className = 'confetti';
+                c.style.left = Math.random() * 100 + 'vw';
+                c.style.top = -10 + 'px';
+                c.style.backgroundColor = ['#fb6f92', '#FFD700', '#ffafcc'][Math.floor(Math.random()*3)];
+                c.style.transform = `rotate(${Math.random() * 360}deg)`;
+                document.body.appendChild(c);
+                
+                const animation = c.animate([
+                    { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
+                    { transform: 'translateY(100vh) rotate(720deg)', opacity: 0 }
+                ], { duration: 2000 + Math.random() * 2000 });
+                
+                animation.onfinish = () => c.remove();
+            }
         }
 
         function createParticle(x, y) {
@@ -244,9 +281,15 @@
 
         function toggleHeart(el) {
             if(document.getElementById('secret-overlay').classList.contains('show')) return;
+            
+            const today = new Date();
+            const isBirthday = (today.getMonth() === 3 && today.getDate() === 11);
+
             const isOpening = !el.classList.contains('open');
             el.classList.toggle('open');
+            
             if (isOpening) {
+                if (isBirthday) triggerConfetti();
                 const rect = el.getBoundingClientRect();
                 for (let i = 0; i < 20; i++) {
                     createParticle(rect.left + rect.width/2, rect.top + rect.height/2);
