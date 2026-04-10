@@ -50,11 +50,14 @@
 
         .heart-box.open { animation: none; }
 
-        /* Birthday Special Mode Style */
+        /* FIXED BIRTHDAY MODE */
+        .heart-box.birthday-mode {
+            filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.8));
+        }
+
         .heart-box.birthday-mode .card {
-            border: 3px solid #FFD700;
-            box-shadow: 0 0 30px #FFD700;
-            background: linear-gradient(135deg, #fff 0%, #fff9e6 100%);
+            background: linear-gradient(135deg, #ffffff 0%, #fffdf0 100%) !important;
+            border: 2px solid #FFD700;
         }
 
         .confetti {
@@ -170,7 +173,7 @@
     </div>
 
     <script>
-      const msgs = [
+        const msgs = [
     "April 1st: No jokes today, just the absolute truth,I am yours forever.",
     "Every day with you is a gift, I love you Shreya!💞",
     "You aren't just in my life, Shreya; you are the reason for it.",
@@ -238,7 +241,7 @@
             const dayNum = today.getDate(); 
             const month = today.getMonth(); // 3 = April
 
-            // Apply birthday mode style if it's April 11th
+            // Apply birthday mode if it's April 11th
             if (month === 3 && dayNum === 11) {
                 document.getElementById('heart').classList.add('birthday-mode');
             }
