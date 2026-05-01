@@ -197,7 +197,7 @@
             "You are my safe space and my wildest adventure, all in one.",
             "Thinking of you is the only thing that makes my day make sense.",
             "In aankhon mai bas tera chehra hai.",
-            "I just love being with you around you and everything just you!”,
+            "I just love being with you around you and everything just you!",
             "My heart beats for you, with you, and because of you.",
             "I love you with a depth that excites me and scares me at the same time.",
             "You are the only person I want to tell about my day to, first and last.",
@@ -240,13 +240,11 @@
             const dayNum = today.getDate(); 
             const month = today.getMonth(); 
 
-            // Birthday Mode Logic (April 11th)
             if (month === 3 && dayNum === 11) {
                 document.getElementById('heart').classList.add('birthday-mode');
             }
 
-            // Using dayNum - 1 to map to the 31 messages
-            document.getElementById('note-text').innerText = msgs[dayNum - 1];
+            document.getElementById('note-text').innerText = msgs[dayNum - 1] || msgs[0];
             document.getElementById('date-label').innerText = today.toLocaleDateString(undefined, {month:'short', day:'numeric'});
         }
 
