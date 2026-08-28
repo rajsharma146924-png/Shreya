@@ -33,7 +33,6 @@
             -webkit-touch-callout: none; -webkit-user-select: none; user-select: none;
         }
 
-        /* Atmospheric Dreamy Glow Backdrop */
         body::before {
             content: ''; position: absolute; inset: 0;
             background: radial-gradient(circle at center, rgba(30, 5, 15, 0.2) 0%, rgba(20, 2, 8, 0.75) 100%);
@@ -71,29 +70,30 @@
             70% { transform: scale(1); }
         }
 
-        /* 3D Envelope Geometry */
         .heart-box {
             position: relative; width: 310px; height: 270px;
             cursor: pointer; 
             perspective: 1400px;
             animation: heartbeat 2.6s infinite ease-in-out;
             transition: filter 0.4s ease;
+            /* Exact heart shape applied to the interactive container boundary */
+            clip-path: path('M155,270 L134,249 C51,186 0,145 0,83 C0,31 41,0 93,0 C124,0 145,20 155,36 C165,20 186,0 217,0 C269,0 310,31 310,83 C310,145 259,186 176,249 L155,270 Z');
         }
 
         .heart-box.open { animation: none; }
 
-        /* Charge ring when holding down */
+        /* Heart-shaped charging glow effect */
         .hold-ring {
-            position: absolute; inset: -15px; border-radius: 50%;
-            border: 3px solid rgba(250, 107, 144, 0.6);
-            opacity: 0; transform: scale(0.8);
+            position: absolute; inset: 0; 
+            background: radial-gradient(circle, rgba(255,215,0,0.4) 0%, rgba(250,107,144,0.6) 70%, transparent 100%);
+            opacity: 0; transform: scale(0.95);
             transition: transform 0.7s cubic-bezier(0.1, 0.9, 0.2, 1), opacity 0.3s ease;
             pointer-events: none; z-index: 10;
+            clip-path: path('M155,270 L134,249 C51,186 0,145 0,83 C0,31 41,0 93,0 C124,0 145,20 155,36 C165,20 186,0 217,0 C269,0 310,31 310,83 C310,145 259,186 176,249 L155,270 Z');
         }
         .holding .hold-ring {
-            opacity: 1; transform: scale(1.2);
-            border-color: #ffd700;
-            box-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
+            opacity: 1; transform: scale(1.05);
+            box-shadow: inset 0 0 25px rgba(255, 215, 0, 0.8);
         }
 
         .heart-box.birthday-mode {
@@ -114,7 +114,6 @@
             box-shadow: 0 15px 40px rgba(0,0,0,0.35); z-index: 1;
         }
 
-        /* 3D Paper Origami Flaps */
         .flap-container {
             position: absolute; inset: 0; width: 310px; height: 270px;
             z-index: 2; pointer-events: none;
@@ -140,7 +139,6 @@
         .heart-box.open .left-flap { transform: rotateY(-155deg); opacity: 0.35; }
         .heart-box.open .right-flap { transform: rotateY(155deg); opacity: 0.35; }
 
-        /* Typography Inside Card */
         #date-label {
             font-size: 0.72rem; color: var(--pink-deep);
             margin-bottom: 8px; font-weight: 700;
@@ -160,7 +158,6 @@
             margin-top: 10px; font-weight: 700; letter-spacing: 0.3px;
         }
 
-        /* Secret Message Glassmorphism Screen */
         #secret-overlay {
             position: fixed; inset: 0; width: 100%; height: 100%;
             background: rgba(253, 242, 244, 0.88);
@@ -289,7 +286,6 @@
             "August is ending, but my love for you is timeless, endless, and entirely yours."
         ];
 
-        /* --- Ambient Dust / Star Particle Canvas --- */
         const canvas = document.getElementById('canvas-bg');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -328,7 +324,6 @@
         }
         drawAmbientParticles();
 
-        /* --- Interaction Handling (Long Press & Tap Isolation) --- */
         let pressTimer = null;
         let isLongPressTriggered = false;
         const heartEl = document.getElementById('heart');
@@ -398,7 +393,6 @@
             const dayNum = today.getDate(); 
             const month = today.getMonth(); 
 
-            // April 11 Birthday check (Month index 3 is April)
             if (month === 3 && dayNum === 11) {
                 heartEl.classList.add('birthday-mode');
             }
@@ -407,7 +401,6 @@
             const noteTextEl = document.getElementById('note-text');
             noteTextEl.innerText = `“${currentMsg}”`;
             
-            // Subtle adaptive font scaling for longer messages
             if (currentMsg.length > 90) {
                 noteTextEl.style.fontSize = '0.84rem';
                 noteTextEl.style.lineHeight = '1.35';
