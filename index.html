@@ -52,14 +52,15 @@
 
         .instruction { 
             margin-bottom: 28px; color: #ffffff; font-weight: 700; 
-            text-shadow: 0 2px 12px rgba(0,0,0,0.6), 0 0 25px rgba(250, 107, 144, 0.4); 
-            font-size: 1.45rem; letter-spacing: 0.5px;
+            font-family: 'Dancing Script', cursive;
+            text-shadow: 0 2px 15px rgba(0,0,0,0.7), 0 0 30px rgba(250, 107, 144, 0.6); 
+            font-size: 2.5rem; letter-spacing: 0.5px;
             animation: pulse-glow 3s infinite ease-in-out;
         }
 
         @keyframes pulse-glow {
-            0%, 100% { transform: scale(1); opacity: 0.92; }
-            50% { transform: scale(1.03); opacity: 1; text-shadow: 0 2px 14px rgba(0,0,0,0.6), 0 0 35px rgba(250, 107, 144, 0.8); }
+            0%, 100% { transform: scale(1); opacity: 0.95; }
+            50% { transform: scale(1.03); opacity: 1; text-shadow: 0 2px 18px rgba(0,0,0,0.7), 0 0 40px rgba(250, 107, 144, 0.9); }
         }
 
         @keyframes heartbeat {
@@ -76,13 +77,11 @@
             perspective: 1400px;
             animation: heartbeat 2.6s infinite ease-in-out;
             transition: filter 0.4s ease;
-            /* Exact heart shape applied to the interactive container boundary */
             clip-path: path('M155,270 L134,249 C51,186 0,145 0,83 C0,31 41,0 93,0 C124,0 145,20 155,36 C165,20 186,0 217,0 C269,0 310,31 310,83 C310,145 259,186 176,249 L155,270 Z');
         }
 
         .heart-box.open { animation: none; }
 
-        /* Heart-shaped charging glow effect */
         .hold-ring {
             position: absolute; inset: 0; 
             background: radial-gradient(circle, rgba(255,215,0,0.4) 0%, rgba(250,107,144,0.6) 70%, transparent 100%);
