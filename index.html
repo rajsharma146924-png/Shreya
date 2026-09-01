@@ -159,6 +159,7 @@
             margin-top: 10px; font-weight: 700; letter-spacing: 0.3px;
         }
 
+        /* --- SECRET OVERLAY --- */
         #secret-overlay {
             position: fixed; inset: 0; width: 100%; height: 100%;
             background: rgba(253, 242, 244, 0.88);
@@ -214,7 +215,7 @@
             border-radius: 2px;
         }
 
-        /* --- UPDATED: VINYL MUSIC BUTTON --- */
+        /* --- VINYL MUSIC BUTTON --- */
         #music-btn {
             position: fixed; top: 20px; right: 20px;
             width: 55px; height: 55px;
@@ -240,29 +241,7 @@
         .playing { animation: spin-slow 2.5s linear infinite; }
         @keyframes spin-slow { 100% { transform: rotate(360deg); } }
 
-        /* --- UPDATED: SMALLER KISS COUNTER --- */
-        #kiss-counter {
-            position: fixed; bottom: 25px;
-            font-family: 'Dancing Script', cursive;
-            font-size: 1.25rem; /* Made significantly smaller */
-            color: #ffb4ca;
-            text-shadow: 0 2px 6px rgba(0,0,0,0.8);
-            z-index: 100; pointer-events: none;
-            opacity: 0.9; letter-spacing: 0.5px;
-        }
-
-        .kiss-mark {
-            position: absolute; font-size: 3rem;
-            pointer-events: none; z-index: 50;
-            animation: kiss-fade 1.5s ease-out forwards;
-            transform: translate(-50%, -50%);
-        }
-        @keyframes kiss-fade {
-            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
-            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
-            100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
-        }
-
+        /* --- MAGIC HEART TRAIL --- */
         .trail-heart {
             position: absolute; pointer-events: none; z-index: 40;
             font-size: 1.2rem; transform: translate(-50%, -50%);
@@ -272,6 +251,92 @@
             0% { transform: translate(-50%, -50%) scale(1) translateY(0); opacity: 0.8; }
             100% { transform: translate(-50%, -50%) scale(0.3) translateY(-30px); opacity: 0; }
         }
+
+        /* --- EMERGENCY HUG --- */
+        #hug-btn {
+            position: fixed; top: 20px; left: 20px;
+            font-size: 2.2rem; cursor: pointer; z-index: 1000;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 10px; border-radius: 50%;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+            animation: float-btn 3s ease-in-out infinite;
+        }
+        #hug-btn:active { transform: scale(0.9); }
+        @keyframes float-btn { 
+            0%, 100% { transform: translateY(0); } 
+            50% { transform: translateY(-6px); } 
+        }
+
+        #hug-overlay {
+            position: fixed; inset: 0; width: 100%; height: 100%;
+            background: rgba(15, 5, 12, 0.9); 
+            display: none; flex-direction: column; justify-content: center;
+            align-items: center; z-index: 3000;
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            padding: 20px; opacity: 0; transition: opacity 0.6s ease;
+            overflow: hidden;
+        }
+        #hug-overlay.show { display: flex; opacity: 1; }
+
+        .hug-content {
+            width: 100%; max-width: 400px;
+            transform: scale(0.8);
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 3005;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        #hug-overlay.show .hug-content { transform: scale(1); }
+
+        /* The Giant Teddy Bear Container */
+        .teddy-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 360px;
+            aspect-ratio: 1/1;
+            display: flex; justify-content: center; align-items: center;
+            animation: breathe 3.5s ease-in-out infinite;
+        }
+        
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.04); }
+        }
+
+        .giant-teddy {
+            width: 100%; height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 15px 25px rgba(0,0,0,0.6));
+        }
+
+        /* The Text sitting directly on the belly */
+        .belly-text {
+            position: absolute;
+            top: 62%; /* Pushes it down to the belly */
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 78%;
+            text-align: center;
+            font-size: 1.35rem;
+            color: #4a2c11; /* Deep chocolate brown for high contrast */
+            font-weight: 700;
+            /* Creates a soft glowing oval behind the text so it blends with the bear */
+            background: radial-gradient(ellipse at center, rgba(255, 245, 248, 0.9) 30%, rgba(255, 245, 248, 0.4) 75%, transparent 100%);
+            padding: 20px 10px;
+            border-radius: 50%;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 1);
+            line-height: 1.4;
+        }
+
+        .hug-particle {
+            position: absolute; pointer-events: none; z-index: 3001;
+            animation: fall-down linear forwards;
+        }
+        @keyframes fall-down {
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+        }
     </style>
 </head>
 <body>
@@ -280,10 +345,25 @@
         <source src="darkhaast.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- The vinyl button -->
     <div id="music-btn" onclick="toggleMusic()"></div>
 
-    <div id="kiss-counter">Kisses sent to Raj: <span id="kiss-count-val">0</span></div>
+    <div id="hug-btn" onclick="triggerHug()">🧸</div>
+
+    <!-- UPDATED: Emergency Hug Overlay -->
+    <div id="hug-overlay" onclick="closeHug()">
+        <div class="hug-content">
+            <div class="teddy-wrapper">
+                <!-- Using a high-quality, super cute 3D-style plush teddy bear icon -->
+                <img src="https://img.icons8.com/fluency/512/teddy-bear.png" class="giant-teddy" alt="Teddy Bear">
+                
+                <div class="belly-text handwritten">
+                    Take a deep breath.<br><br>
+                    I am right here, I love you, and everything is going to be okay baby.
+                </div>
+            </div>
+            <p style="margin-top: 25px; font-size: 0.9rem; opacity: 0.7; color: #ffb4ca; font-weight: 600; text-align: center;">(Tap anywhere to close)</p>
+        </div>
+    </div>
 
     <canvas id="canvas-bg"></canvas>
 
@@ -367,54 +447,35 @@
             }
         }
 
-        /* --- BOOP KISS COUNTER (WITH BUG FIX) --- */
-        let kissCount = localStorage.getItem('shreyaKisses') || 0;
-        document.getElementById('kiss-count-val').innerText = kissCount;
+        /* --- EMERGENCY HUG LOGIC --- */
+        function triggerHug() {
+            const overlay = document.getElementById('hug-overlay');
+            overlay.style.display = 'flex';
+            requestAnimationFrame(() => overlay.classList.add('show'));
 
-        // The Debouncer: Prevents two kisses from firing at the exact same millisecond
-        let lastKissTime = 0; 
-
-        function addKiss(x, y) {
-            const now = Date.now();
-            if (now - lastKissTime < 400) return; // Ignore if less than 400ms since last kiss
-            lastKissTime = now;
-
-            kissCount++;
-            localStorage.setItem('shreyaKisses', kissCount);
-            document.getElementById('kiss-count-val').innerText = kissCount;
-
-            const k = document.createElement('div');
-            k.className = 'kiss-mark';
-            k.innerText = '💋';
-            k.style.left = x + 'px';
-            k.style.top = y + 'px';
-            document.body.appendChild(k);
-            setTimeout(() => k.remove(), 1500);
+            for(let i = 0; i < 35; i++) {
+                setTimeout(() => {
+                    if(!overlay.classList.contains('show')) return;
+                    const p = document.createElement('div');
+                    p.className = 'hug-particle';
+                    p.innerText = ['🧸', '💖', '✨', '💕', '🌸'][Math.floor(Math.random() * 5)];
+                    p.style.left = (Math.random() * 100) + 'vw';
+                    p.style.fontSize = (1.5 + Math.random() * 1.5) + 'rem';
+                    p.style.animationDuration = (3 + Math.random() * 3) + 's';
+                    overlay.appendChild(p);
+                    setTimeout(() => p.remove(), 6000);
+                }, i * 150); 
+            }
         }
 
-        // Desktop Double Click
-        document.addEventListener('dblclick', (e) => {
-            if(!e.target.closest('#heart-wrapper') && !e.target.closest('#music-btn')) {
-                addKiss(e.pageX, e.pageY);
-            }
-        });
-
-        // Mobile Double Tap
-        let lastTap = 0;
-        document.addEventListener('touchend', (e) => {
-            if(e.target.closest('#heart-wrapper') || e.target.closest('#music-btn')) return;
-            const currentTime = new Date().getTime();
-            const tapLength = currentTime - lastTap;
-            
-            if (tapLength < 300 && tapLength > 0) {
-                const touch = e.changedTouches[0];
-                addKiss(touch.pageX, touch.pageY);
-                e.preventDefault();
-                lastTap = 0; // Reset so a third tap doesn't immediately trigger another kiss
-                return;
-            }
-            lastTap = currentTime;
-        });
+        function closeHug() {
+            const overlay = document.getElementById('hug-overlay');
+            overlay.classList.remove('show');
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                overlay.querySelectorAll('.hug-particle').forEach(p => p.remove());
+            }, 600);
+        }
 
         /* --- MAGIC HEART TRAIL --- */
         let lastTrailTime = 0;
@@ -483,7 +544,8 @@
         const heartEl = document.getElementById('heart');
 
         function startPress(e) { 
-            if(e.target.closest('#music-btn')) return;
+            if(e.target.closest('#music-btn') || e.target.closest('#hug-btn')) return;
+            
             isLongPressTriggered = false;
             heartEl.classList.add('holding');
             pressTimer = setTimeout(() => {
