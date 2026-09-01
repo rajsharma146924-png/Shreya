@@ -113,7 +113,6 @@
             box-shadow: 0 15px 40px rgba(0,0,0,0.35); z-index: 1;
         }
 
-        /* Kinematic Origami Flap System with Crease Hinges */
         .flap-container {
             position: absolute; inset: 0; width: 310px; height: 270px;
             z-index: 2; pointer-events: none;
@@ -138,15 +137,8 @@
             transform-origin: 100% 50%;
         }
 
-        /* Kinematic rotation with simultaneous 3D dihedral folding */
-        .heart-box.open .left-flap { 
-            transform: rotateY(-165deg) rotateZ(-5deg) translateZ(10px); 
-            opacity: 0.2; 
-        }
-        .heart-box.open .right-flap { 
-            transform: rotateY(165deg) rotateZ(5deg) translateZ(10px); 
-            opacity: 0.2; 
-        }
+        .heart-box.open .left-flap { transform: rotateY(-165deg) rotateZ(-5deg) translateZ(10px); opacity: 0.2; }
+        .heart-box.open .right-flap { transform: rotateY(165deg) rotateZ(5deg) translateZ(10px); opacity: 0.2; }
 
         #date-label {
             font-size: 0.72rem; color: var(--pink-deep);
@@ -221,9 +213,67 @@
             z-index: 9999; pointer-events: none;
             border-radius: 2px;
         }
+
+        /* --- NEW FEATURES CSS --- */
+        
+        /* Music Button */
+        #music-btn {
+            position: fixed; top: 20px; right: 20px;
+            font-size: 2rem; cursor: pointer; z-index: 1000;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 12px; border-radius: 50%;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+        #music-btn:active { transform: scale(0.9); }
+        .playing { animation: spin-slow 4s linear infinite; background: rgba(250, 107, 144, 0.3) !important; }
+        @keyframes spin-slow { 100% { transform: rotate(360deg); } }
+
+        /* Kiss Counter */
+        #kiss-counter {
+            position: fixed; bottom: 25px;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.8rem; color: #ffb4ca;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+            z-index: 100; pointer-events: none;
+            opacity: 0.9;
+        }
+
+        .kiss-mark {
+            position: absolute; font-size: 3rem;
+            pointer-events: none; z-index: 50;
+            animation: kiss-fade 1.5s ease-out forwards;
+            transform: translate(-50%, -50%);
+        }
+        @keyframes kiss-fade {
+            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+        }
+
+        /* Trail Hearts */
+        .trail-heart {
+            position: absolute; pointer-events: none; z-index: 40;
+            font-size: 1.2rem; transform: translate(-50%, -50%);
+            animation: trail-fade 0.8s linear forwards;
+        }
+        @keyframes trail-fade {
+            0% { transform: translate(-50%, -50%) scale(1) translateY(0); opacity: 0.8; }
+            100% { transform: translate(-50%, -50%) scale(0.3) translateY(-30px); opacity: 0; }
+        }
     </style>
 </head>
 <body>
+
+    <!-- ADD AUDIO FILE HERE -->
+    <audio id="bg-music" loop>
+        <source src="darkhaast.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="music-btn" onclick="toggleMusic()">🎵</div>
+
+    <div id="kiss-counter">Kisses sent to Raj: <span id="kiss-count-val">0</span></div>
 
     <canvas id="canvas-bg"></canvas>
 
@@ -262,39 +312,113 @@
 
     <script>
         const msgs = [
-    "Happy September, my sweet babyy! Ready for 30 more days of me being completely obsessed with you!!",
-    "You make my tummy do happy little flips.",
-    "I just really, really, really love you. Like, a lotttt.",
-    "Just thinking about your cute face makes me smile like an idot.",
-    "You are my favorite person to do absolutely everything & nothing with.",
-    "Happy Anniversary, princess! Another month of me being the luckiest guy in the whole world. ❤️",
-    "I want to give you all the kisses and a giant hug today.",
-    "You are the absolute sweetest thing in my life, Shreya ill bite you.",
-    "Being with you feels like a warm, fuzzy blanket with the ac on 16.",
-    "I’m keeping you forever. No take backs!",
-    "You have the cutest giggle I have ever heard & the cutest smile ive ever seen.",
-    "Even when you're sleepy and messy, you are so pretty to me.",
-    "You make my heart do a silly little happy dance.",
-    "I could just stare at you all day long and never get bored.",
-    "You are the only one who fills my heart and makes me wanna improve every single day!",
-    "Just a quick note to say you are my favorite girl ever.",
-    "Every time my phone buzzes, I cross my fingers it’s you.",
-    "I love your cute little habbit of making faces so much.",
-    "You are my little ray of sunshine, Shreyuu.",
-    "My favorite hobby is trying to make you laugh.",
-    "I love you to the moon, past all the stars, and back.",
-    "You're sweeter than a big box of chocolates and hotter than the sun itself.",
-    "I just want to squish you and hold you tight right now.",
-    "Life is just so much more fun when you are around.",
-    "You are the absolute apple of my eye lets go get apple pie.",
-    "Sending you the biggest, tightest virtual hug & touches!",
-    "You are my best friend and my biggest crush all in one.",
-    "I am so completely and totally crazy about you.",
-    "I can't wait to see your pretty face again.",
-    "September is over, but my crush on you just keeps getting bigger!"
-];
+            "Happy September, my sweet babyy! Ready for 30 more days of me being completely obsessed with you!!",
+            "You make my tummy do happy little flips.",
+            "I just really, really, really love you. Like, a lotttt.",
+            "Just thinking about your cute face makes me smile like an idot.",
+            "You are my favorite person to do absolutely everything & nothing with.",
+            "Happy Anniversary, princess! Another month of me being the luckiest guy in the whole world. ❤️",
+            "I want to give you all the kisses and a giant hug today.",
+            "You are the absolute sweetest thing in my life, Shreya ill bite you.",
+            "Being with you feels like a warm, fuzzy blanket with the ac on 16.",
+            "I’m keeping you forever. No take backs!",
+            "You have the cutest giggle I have ever heard & the cutest smile ive ever seen.",
+            "Even when you're sleepy and messy, you are so pretty to me.",
+            "You make my heart do a silly little happy dance.",
+            "I could just stare at you all day long and never get bored.",
+            "You are the only one who fills my heart and makes me wanna improve every single day!",
+            "Just a quick note to say you are my favorite girl ever.",
+            "Every time my phone buzzes, I cross my fingers it’s you.",
+            "I love your cute little habbit of making faces so much.",
+            "You are my little ray of sunshine, Shreyuu.",
+            "My favorite hobby is trying to make you laugh.",
+            "I love you to the moon, past all the stars, and back.",
+            "You're sweeter than a big box of chocolates and hotter than the sun itself.",
+            "I just want to squish you and hold you tight right now.",
+            "Life is just so much more fun when you are around.",
+            "You are the absolute apple of my eye lets go get apple pie.",
+            "Sending you the biggest, tightest virtual hug & touches!",
+            "You are my best friend and my biggest crush all in one.",
+            "I am so completely and totally crazy about you.",
+            "I can't wait to see your pretty face again.",
+            "September is over, but my crush on you just keeps getting bigger!"
+        ];
+
+        /* --- NEW LOGIC: MUSIC PLAYER --- */
+        const bgMusic = document.getElementById('bg-music');
+        const musicBtn = document.getElementById('music-btn');
+        function toggleMusic() {
+            if (bgMusic.paused) {
+                bgMusic.play();
+                musicBtn.classList.add('playing');
+            } else {
+                bgMusic.pause();
+                musicBtn.classList.remove('playing');
+            }
+        }
+
+        /* --- NEW LOGIC: BOOP KISS COUNTER --- */
+        let kissCount = localStorage.getItem('shreyaKisses') || 0;
+        document.getElementById('kiss-count-val').innerText = kissCount;
+
+        function addKiss(x, y) {
+            kissCount++;
+            localStorage.setItem('shreyaKisses', kissCount);
+            document.getElementById('kiss-count-val').innerText = kissCount;
+
+            const k = document.createElement('div');
+            k.className = 'kiss-mark';
+            k.innerText = '💋';
+            k.style.left = x + 'px';
+            k.style.top = y + 'px';
+            document.body.appendChild(k);
+            setTimeout(() => k.remove(), 1500);
+        }
+
+        // Desktop Double Click
+        document.addEventListener('dblclick', (e) => {
+            if(!e.target.closest('#heart-wrapper') && !e.target.closest('#music-btn')) {
+                addKiss(e.pageX, e.pageY);
+            }
+        });
+
+        // Mobile Double Tap
+        let lastTap = 0;
+        document.addEventListener('touchend', (e) => {
+            if(e.target.closest('#heart-wrapper') || e.target.closest('#music-btn')) return;
+            const currentTime = new Date().getTime();
+            const tapLength = currentTime - lastTap;
+            if (tapLength < 300 && tapLength > 0) {
+                const touch = e.changedTouches[0];
+                addKiss(touch.pageX, touch.pageY);
+                e.preventDefault();
+            }
+            lastTap = currentTime;
+        });
+
+        /* --- NEW LOGIC: MAGIC HEART TRAIL --- */
+        let lastTrailTime = 0;
+        function createTrail(x, y) {
+            const now = Date.now();
+            if (now - lastTrailTime < 50) return; // Throttle to prevent lagging
+            lastTrailTime = now;
+
+            const t = document.createElement('div');
+            t.className = 'trail-heart';
+            t.innerText = ['✨', '💖', '💕'][Math.floor(Math.random() * 3)];
+            t.style.left = x + 'px';
+            t.style.top = y + 'px';
+            document.body.appendChild(t);
+            setTimeout(() => t.remove(), 800);
+        }
+
+        document.addEventListener('mousemove', (e) => createTrail(e.pageX, e.pageY));
+        document.addEventListener('touchmove', (e) => {
+            createTrail(e.touches[0].pageX, e.touches[0].pageY);
+        }, {passive: true});
 
 
+        /* --- ORIGINAL BACKGROUND LOGIC --- */
         const canvas = document.getElementById('canvas-bg');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -333,11 +457,13 @@
         }
         drawAmbientParticles();
 
+        /* --- ORIGINAL HEART LOGIC --- */
         let pressTimer = null;
         let isLongPressTriggered = false;
         const heartEl = document.getElementById('heart');
 
-        function startPress() { 
+        function startPress(e) { 
+            if(e.target.closest('#music-btn')) return;
             isLongPressTriggered = false;
             heartEl.classList.add('holding');
             pressTimer = setTimeout(() => {
