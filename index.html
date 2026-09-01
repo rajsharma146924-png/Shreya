@@ -7,7 +7,7 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Playfair+Display:ital,wght@0,600;1,400;1,600&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Playfair+Display:ital,wght@0,600;1,400;1,600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -289,7 +289,7 @@
         }
         #hug-overlay.show .hug-content { transform: scale(1); }
 
-        /* The Giant Emoji Teddy Bear Container */
+        /* The Giant High-Res iOS Teddy Bear Container */
         .teddy-wrapper {
             position: relative;
             width: 100%;
@@ -302,34 +302,34 @@
             50% { transform: scale(1.03); }
         }
 
-        /* The massive emoji - FIX FOR BLURRY EMOJI */
+        /* High-Res Image instead of a blurry text emoji */
         .giant-emoji-teddy {
-            font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
-            font-size: 20rem; /* Increased size to make the belly bigger */
-            line-height: 1;
-            margin: 0;
-            /* Swapped filter:drop-shadow to text-shadow for crisp emoji rendering on mobile */
-            text-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            width: 320px; /* Massive and crystal clear */
+            height: auto;
+            filter: drop-shadow(0 15px 25px rgba(0,0,0,0.7));
             user-select: none;
-            -webkit-font-smoothing: antialiased;
+            pointer-events: none;
         }
 
-        /* The Text sitting directly on the emoji's belly */
+        /* The strictly constrained, modern text on the belly */
         .belly-text {
             position: absolute;
-            top: 67.5%; /* Precisely positioned over the iOS teddy emoji's belly */
+            top: 66%; /* Coordinates perfectly over the image belly */
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 52%; /* Constrained tightly to stay inside the brown of the belly */
+            width: 155px; /* Locked width so it never pours out */
             text-align: center;
-            font-size: 1rem; /* Perfectly sized to fit */
-            color: #3b1e0f; /* Deep, rich brown */
-            font-weight: 800;
-            background: transparent;
-            /* Gives a sharp white glow to pop against the brown belly without an ugly box */
-            text-shadow: 0px 0px 5px rgba(255,255,255,0.9), 0px 0px 2px rgba(255,255,255,1);
-            line-height: 1.2;
+            
+            /* Changed to a clean, crisp, modern font */
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.8rem; /* Perfectly sized to fit the box */
+            color: #3b1e0f; /* Deep chocolate brown */
+            font-weight: 800; /* Bold for readability */
+            
+            text-shadow: 0px 0px 8px rgba(255,255,255,1), 0px 0px 4px rgba(255,255,255,0.9);
+            line-height: 1.4;
             padding: 0;
+            pointer-events: none; /* Allows tapping through the text */
         }
 
         .hug-particle {
@@ -352,15 +352,16 @@
 
     <div id="hug-btn" onclick="triggerHug()">🧸</div>
 
-    <!-- Emergency Hug Overlay with fixed text layout -->
+    <!-- Emergency Hug Overlay with Crystal Clear Image and Clean Text -->
     <div id="hug-overlay" onclick="closeHug()">
         <div class="hug-content">
             <div class="teddy-wrapper">
                 
-                <div class="giant-emoji-teddy">🧸</div>
+                <!-- High-res iOS 16 Emoji Image from CDN to prevent blurriness -->
+                <img src="https://em-content.zobj.net/source/apple/391/teddy-bear_1f9f8.png" alt="🧸" class="giant-emoji-teddy">
                 
-                <!-- Fixed the gap by removing the double <br> -->
-                <div class="belly-text handwritten">
+                <!-- Text strictly locked into the boundaries of the belly area -->
+                <div class="belly-text">
                     Take a deep breath.<br>
                     I am right here, I love you, and everything is going to be okay baby.
                 </div>
