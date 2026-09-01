@@ -302,32 +302,34 @@
             50% { transform: scale(1.03); }
         }
 
-        /* The massive emoji */
+        /* The massive emoji - FIX FOR BLURRY EMOJI */
         .giant-emoji-teddy {
-            font-size: 15rem; /* Massive size */
+            font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+            font-size: 20rem; /* Increased size to make the belly bigger */
             line-height: 1;
             margin: 0;
-            filter: drop-shadow(0 15px 25px rgba(0,0,0,0.7));
+            /* Swapped filter:drop-shadow to text-shadow for crisp emoji rendering on mobile */
+            text-shadow: 0 10px 30px rgba(0,0,0,0.6);
             user-select: none;
+            -webkit-font-smoothing: antialiased;
         }
 
         /* The Text sitting directly on the emoji's belly */
         .belly-text {
             position: absolute;
-            top: 70%; /* Coordinates perfectly over the belly of the iOS teddy emoji */
+            top: 67.5%; /* Precisely positioned over the iOS teddy emoji's belly */
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 65%; /* Constrains text width to fit inside the belly */
+            width: 52%; /* Constrained tightly to stay inside the brown of the belly */
             text-align: center;
-            font-size: 0.95rem; /* Slightly smaller to fit the space nicely */
-            color: #3b1e0f; /* Deep, rich brown to look cohesive */
+            font-size: 1rem; /* Perfectly sized to fit */
+            color: #3b1e0f; /* Deep, rich brown */
             font-weight: 800;
-            /* Glowing background overlay so it reads perfectly over the emoji details */
-            background: radial-gradient(circle, rgba(255, 245, 248, 0.95) 45%, rgba(255, 245, 248, 0.5) 80%, transparent 100%);
-            padding: 18px;
-            border-radius: 50%;
-            text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);
-            line-height: 1.35;
+            background: transparent;
+            /* Gives a sharp white glow to pop against the brown belly without an ugly box */
+            text-shadow: 0px 0px 5px rgba(255,255,255,0.9), 0px 0px 2px rgba(255,255,255,1);
+            line-height: 1.2;
+            padding: 0;
         }
 
         .hug-particle {
@@ -350,15 +352,16 @@
 
     <div id="hug-btn" onclick="triggerHug()">🧸</div>
 
-    <!-- UPDATED: Emergency Hug Overlay with Emoji Belly Text -->
+    <!-- Emergency Hug Overlay with fixed text layout -->
     <div id="hug-overlay" onclick="closeHug()">
         <div class="hug-content">
             <div class="teddy-wrapper">
                 
                 <div class="giant-emoji-teddy">🧸</div>
                 
+                <!-- Fixed the gap by removing the double <br> -->
                 <div class="belly-text handwritten">
-                    Take a deep breath.<br><br>
+                    Take a deep breath.<br>
                     I am right here, I love you, and everything is going to be okay baby.
                 </div>
                 
