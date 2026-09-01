@@ -214,30 +214,41 @@
             border-radius: 2px;
         }
 
-        /* --- NEW FEATURES CSS --- */
-        
-        /* Music Button */
+        /* --- UPDATED: VINYL MUSIC BUTTON --- */
         #music-btn {
             position: fixed; top: 20px; right: 20px;
-            font-size: 2rem; cursor: pointer; z-index: 1000;
-            background: rgba(255, 255, 255, 0.15);
-            padding: 12px; border-radius: 50%;
-            backdrop-filter: blur(8px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            transition: transform 0.3s ease, background 0.3s ease;
+            width: 55px; height: 55px;
+            cursor: pointer; z-index: 1000;
+            border-radius: 50%;
+            background: radial-gradient(circle, #050505 10%, #222 15%, #050505 20%, #222 25%, #050505 30%, #222 35%, #050505 40%, #222 45%, #050505 50%, #222 55%, #050505 60%, #222 65%, #050505 70%, #222 75%, #050505 80%, #222 85%, #050505 90%, #222 95%, #050505 100%);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.6), inset 0 0 6px rgba(0,0,0,1);
+            transition: transform 0.2s ease;
+            display: flex; align-items: center; justify-content: center;
         }
         #music-btn:active { transform: scale(0.9); }
-        .playing { animation: spin-slow 4s linear infinite; background: rgba(250, 107, 144, 0.3) !important; }
+        #music-btn::before {
+            content: ''; position: absolute;
+            width: 20px; height: 20px;
+            background: var(--pink-deep);
+            border-radius: 50%; border: 1px solid #111;
+        }
+        #music-btn::after {
+            content: ''; position: absolute;
+            width: 5px; height: 5px;
+            background: #fff; border-radius: 50%;
+        }
+        .playing { animation: spin-slow 2.5s linear infinite; }
         @keyframes spin-slow { 100% { transform: rotate(360deg); } }
 
-        /* Kiss Counter */
+        /* --- UPDATED: SMALLER KISS COUNTER --- */
         #kiss-counter {
             position: fixed; bottom: 25px;
             font-family: 'Dancing Script', cursive;
-            font-size: 1.8rem; color: #ffb4ca;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+            font-size: 1.25rem; /* Made significantly smaller */
+            color: #ffb4ca;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.8);
             z-index: 100; pointer-events: none;
-            opacity: 0.9;
+            opacity: 0.9; letter-spacing: 0.5px;
         }
 
         .kiss-mark {
@@ -252,7 +263,6 @@
             100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
         }
 
-        /* Trail Hearts */
         .trail-heart {
             position: absolute; pointer-events: none; z-index: 40;
             font-size: 1.2rem; transform: translate(-50%, -50%);
@@ -266,12 +276,12 @@
 </head>
 <body>
 
-    <!-- ADD AUDIO FILE HERE -->
     <audio id="bg-music" loop>
         <source src="darkhaast.mp3" type="audio/mpeg">
     </audio>
 
-    <div id="music-btn" onclick="toggleMusic()">🎵</div>
+    <!-- The vinyl button -->
+    <div id="music-btn" onclick="toggleMusic()"></div>
 
     <div id="kiss-counter">Kisses sent to Raj: <span id="kiss-count-val">0</span></div>
 
@@ -344,7 +354,7 @@
             "September is over, but my crush on you just keeps getting bigger!"
         ];
 
-        /* --- NEW LOGIC: MUSIC PLAYER --- */
+        /* --- MUSIC PLAYER --- */
         const bgMusic = document.getElementById('bg-music');
         const musicBtn = document.getElementById('music-btn');
         function toggleMusic() {
@@ -357,11 +367,18 @@
             }
         }
 
-        /* --- NEW LOGIC: BOOP KISS COUNTER --- */
+        /* --- BOOP KISS COUNTER (WITH BUG FIX) --- */
         let kissCount = localStorage.getItem('shreyaKisses') || 0;
         document.getElementById('kiss-count-val').innerText = kissCount;
 
+        // The Debouncer: Prevents two kisses from firing at the exact same millisecond
+        let lastKissTime = 0; 
+
         function addKiss(x, y) {
+            const now = Date.now();
+            if (now - lastKissTime < 400) return; // Ignore if less than 400ms since last kiss
+            lastKissTime = now;
+
             kissCount++;
             localStorage.setItem('shreyaKisses', kissCount);
             document.getElementById('kiss-count-val').innerText = kissCount;
@@ -388,19 +405,22 @@
             if(e.target.closest('#heart-wrapper') || e.target.closest('#music-btn')) return;
             const currentTime = new Date().getTime();
             const tapLength = currentTime - lastTap;
+            
             if (tapLength < 300 && tapLength > 0) {
                 const touch = e.changedTouches[0];
                 addKiss(touch.pageX, touch.pageY);
                 e.preventDefault();
+                lastTap = 0; // Reset so a third tap doesn't immediately trigger another kiss
+                return;
             }
             lastTap = currentTime;
         });
 
-        /* --- NEW LOGIC: MAGIC HEART TRAIL --- */
+        /* --- MAGIC HEART TRAIL --- */
         let lastTrailTime = 0;
         function createTrail(x, y) {
             const now = Date.now();
-            if (now - lastTrailTime < 50) return; // Throttle to prevent lagging
+            if (now - lastTrailTime < 50) return; 
             lastTrailTime = now;
 
             const t = document.createElement('div');
